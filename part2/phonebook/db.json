@@ -1,29 +1,19 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
       "name": "Matti Järvinen",
-      "phone": "0409999999",
+      "phone": "04333333333",
       "id": 5
+    },
+    {
+      "name": "Ville Lehtinen",
+      "phone": "0455555555",
+      "id": 8
+    },
+    {
+      "name": "Matti Koskinen",
+      "phone": "0477777777",
+      "id": 9
     }
   ]
 }
