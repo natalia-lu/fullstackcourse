@@ -1,3 +1,4 @@
+import anecdoteService from '../services/anecdotes'
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -19,18 +20,38 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-export const voteForAnecdote = (id) => {
-  return {
-	type: 'VOTE',
-    data: { id } 	
-  }	
+export const voteForAnecdote = anecdote => {
+  return async dispatch => {
+	const newAnecdote = { 
+      ...anecdote, 
+      votes: anecdote.votes + 1 
+    }
+    const updatedAnecdote = await anecdoteService.update(anecdote.id, newAnecdote)
+    dispatch({
+	  type: 'VOTE',
+      data: updatedAnecdote 	
+    }) 	
+  }
 }
 
-export const createAnecdote = (anecdote) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: asObject(anecdote)
-  }	
+export const createAnecdote = anecdote => {
+  return async dispatch => {
+	const newAnecdote = await anecdoteService.createNew(anecdote)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote
+	})	
+  }
+}
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+	const anecdotes = await anecdoteService.getAll()
+    dispatch({
+	  type: 'INIT_ANECDOTES',
+      data: anecdotes		
+	})	
+  }  
 }	
 
 const reducer = (state = initialState, action) => {
@@ -41,16 +62,14 @@ const reducer = (state = initialState, action) => {
       return state.concat(action.data)
     }
     case 'VOTE': {
-      const id = action.data.id
-      const anecdoteToChange = state.find(n => n.id === id)
-      const changedAnecdote = { 
-        ...anecdoteToChange, 
-        votes: anecdoteToChange.votes + 1 
-      }
+	  const changedAnecdote = action.data	
       return state.map(anecdote =>
-        anecdote.id !== id ? anecdote : changedAnecdote 
+        anecdote.id !== changedAnecdote.id ? anecdote : changedAnecdote 
       )
     }
+	case 'INIT_ANECDOTES': {
+      return action.data
+	}
   }
   return state
 }
